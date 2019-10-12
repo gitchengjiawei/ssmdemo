@@ -11,4 +11,17 @@
         from user u
     </select>
 
+    <select id="getUserByUsername" parameterType="java.lang.String" resultType="com.open.web.bean.User">
+        select
+            u.id as id,
+            u.username as username,
+            u.password as password,
+            u.gender as gender,
+            u.age as age
+        from
+            user u
+        where
+            u.username = #{username}
+    </select>
+
 </mapper>
