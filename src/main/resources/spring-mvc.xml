@@ -15,18 +15,53 @@
     <context:component-scan base-package="com.open.web.controller"/>
 
     <!--配置视图解析器-->
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/views/"/>
         <property name="suffix" value=".html"/>
+    </bean>-->
+
+    <!-- 设置首页 -->
+    <mvc:view-controller path="/" view-name="login" />
+
+    <mvc:resources mapping="/img/**" location="/static/img/" />
+    <mvc:resources mapping="/js/**" location="/static/js/" />
+    <mvc:resources mapping="/css/**" location="/static/css/" />
+    <mvc:resources mapping="/upload/**" location="/upload/" />
+
+    <!-- 使用thymeleaf解析 -->
+    <bean id="templateResolver" class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">
+        <property name="prefix" value="/WEB-INF/templates/" />
+        <property name="suffix" value=".html" />
+        <property name="templateMode" value="HTML" />
+        <property name="cacheable" value="false" />
+        <property name="characterEncoding" value="UTF-8" />
+    </bean>
+
+    <bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
+        <property name="templateResolver" ref="templateResolver" />
+    </bean>
+
+    <bean id="thymeleafViewResolver" class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+        <property name="templateEngine" ref="templateEngine" />
+        <property name="characterEncoding" value="UTF-8" />
     </bean>
 
     <mvc:interceptors>
         <mvc:interceptor>
             <!-- 拦截所有的请求 -->
             <mvc:mapping path="/api/v2/**"/>
-            <!-- 不拦截login请求和login.do请求 -->
+            <!-- 不拦截静态资源 -->
+            <mvc:exclude-mapping path="/**/fonts/*"/>
+            <mvc:exclude-mapping path="/**/*.css"/>
+            <mvc:exclude-mapping path="/**/*.js"/>
+            <mvc:exclude-mapping path="/**/*.png"/>
+            <mvc:exclude-mapping path="/**/*.gif"/>
+            <mvc:exclude-mapping path="/**/*.jpg"/>
+            <mvc:exclude-mapping path="/**/*.jpeg"/>
+            <!-- 不拦截login请求和register请求 -->
             <mvc:exclude-mapping path="/api/v2/user/toLogin"/>
             <mvc:exclude-mapping path="/api/v2/user/login"/>
+            <mvc:exclude-mapping path="/api/v2/user/register"/>
             <bean class="com.open.web.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

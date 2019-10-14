@@ -58,7 +58,7 @@ public class LoggerAspect {
             result = joinPoint.proceed();
 
             if(result != null){
-                log.info("[|||||||]request url  {}({}) return : {}",uri,requestMethod,result);
+                log.info("[|||||||]request url  {}({}) return : {}({})",uri,requestMethod,result,result.getClass().getTypeName());
             }else{
                 log.info("[|||||||]request url  {}({}) end.");
             }

@@ -1,6 +1,7 @@
 package com.open.web.controller;
 
 import com.open.web.bean.User;
+import com.open.web.constant.ResponseCode;
 import com.open.web.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang.StringUtils;
@@ -29,8 +30,17 @@ public class UserController extends BaseController {
      * 跳转到登录页面
      * @return
      */
-    @GetMapping("toLogin")
+    @GetMapping("/")
     public String toLogin(){
+        return "login";
+    }
+
+    /**
+     * 跳转到登录页面
+     * @return
+     */
+    @GetMapping("/toLogin")
+    public String toLogin2(){
         return "login";
     }
 
@@ -50,32 +60,66 @@ public class UserController extends BaseController {
         ModelAndView mv = null;
 
         if(StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
-            mv = getModelAndView("login");
-            mv.addObject("message","用户名或密码不能为空");
+            mv = getModelAndView("login", ResponseCode.BAD_REQUEST,"用户名或密码不能为空");
             return mv;
         }
 
         User user = userService.getUserByUsername(username);
         if(null == user){
-            mv = getModelAndView("login");
-            mv.addObject("message","该用户不存在");
+            mv = getModelAndView("login",ResponseCode.USER_NOT_EXIST,"该用户不存在");
             return mv;
         }
 
         String queryPassword = user.getPassword();
         if(null != queryPassword && queryPassword.equals(password)){
-            mv = getModelAndView("index");
-            mv.addObject("message","登录成功");
+            mv = getModelAndView("index",ResponseCode.OK,"登录成功");
 
             // 将user放入session中，保持登录状态
             request.getSession().setAttribute("session_user",user);
 
             return mv;
         }else{
-            mv = getModelAndView("login");
-            mv.addObject("message","密码错误");
+            mv = getModelAndView("login",ResponseCode.BAD_REQUEST,"密码错误");
             return mv;
         }
+    }
+
+    /**
+     * 注册用户
+     * @param user 用户信息
+     * @return
+     */
+    @PostMapping("register")
+    public ModelAndView register(@RequestBody User user){
+
+        ModelAndView mv = null;
+
+        //参数校验
+        if(null == user) {
+            mv = getModelAndView("register", ResponseCode.BAD_REQUEST, "用户信息不能为空");
+            return mv;
+        }
+
+        if(StringUtils.isEmpty(user.getUsername()) || StringUtils.isEmpty(user.getPassword())){
+            mv = getModelAndView("register", ResponseCode.BAD_REQUEST, "必填项信息不能为空");
+            return mv;
+        }
+
+        try {
+            userService.addUser(user);
+        }catch (Exception e){
+            e.printStackTrace();
+            mv = getModelAndView("register",ResponseCode.SERVER_ERROR,"添加用户时出现异常");
+            return mv;
+        }
+
+        if(null == user.getId() || StringUtils.isEmpty(user.getId().toString())){
+            mv = getModelAndView("register",ResponseCode.ADD_FAILED,"添加用户信息失败");
+            return mv;
+        }
+
+        mv = getModelAndView("login",ResponseCode.OK,"添加用户成功");
+        return mv;
     }
 
     /**
