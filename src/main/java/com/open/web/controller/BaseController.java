@@ -26,6 +26,7 @@ public class BaseController {
      */
     @RequestMapping("/toPage")
     public String toPage(String pageName){
+
         return pageName;
     }
 

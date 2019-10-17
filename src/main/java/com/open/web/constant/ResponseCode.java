@@ -28,6 +28,10 @@ public class ResponseCode {
      */
     public static final String USER_NOT_EXIST = "3001";
     /**
+     * 该用户已经被注册
+     */
+    public static final String USERNAME_OCCUPIED = "3002";
+    /**
      * 资源未找到/不存在
      */
     public static final String NOT_FOUND = "4000";

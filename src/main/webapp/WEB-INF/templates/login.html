@@ -13,7 +13,16 @@
     <script type="text/javascript">
         $(function () {
             var height = $(window).height();
+            $('#submitBtn').attr("disabled", true);
             $("#container").css("height", height + "px");
+            $('#username').blur(infoCheck);
+            $('#password').blur(infoCheck);
+            $('#code').blur(infoCheck);
+
+            var message = "[[${message}]]";
+            if(message != "") {
+                alert(message);
+            }
         });
     </script>
 </head>
@@ -42,7 +51,7 @@
                                 <img src="/auth/code" style="cursor:pointer;" id="authCode" onclick="reloadCode(this)">
                             </div>
                             <input type="submit" class="btn btn-primary" id="submitBtn" value="登录" />
-                            <a href="/toPage?pageName=register" id="registerBtn" class="btn btn-default">注册</a>
+                            <a href="/toPage?pageName=register" id="registerBtn" class="">没有账号？前往注册</a>
                         </form>
                     </div>
                 </div>
@@ -54,6 +63,17 @@
     <script type="text/javascript">
         function reloadCode() {
             $("#authCode").prop('src','/auth/code?time=' + new Date().getMilliseconds());
+        }
+        
+        function infoCheck() {
+            var username = $('#username').val();
+            var password = $('#password').val();
+            var code = $('#code').val();
+            if(username == '' || password == '' || code == ''){
+                $('#submitBtn').attr("disabled", true);
+            }else{
+                $('#submitBtn').attr("disabled", false);
+            }
         }
     </script>
 

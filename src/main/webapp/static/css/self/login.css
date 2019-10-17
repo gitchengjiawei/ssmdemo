@@ -65,10 +65,12 @@ body{
 
 #submitBtn{
     width: 165px;
+    margin-right: 20px;
 }
 
 #registerBtn{
     margin-left: 20px;
     width: 165px;
+    display: inline-block;
 }
 
