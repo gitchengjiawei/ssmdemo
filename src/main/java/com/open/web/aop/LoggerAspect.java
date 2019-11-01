@@ -54,14 +54,14 @@ public class LoggerAspect {
             }
 
             sb.append(" ]");
-            log.info("[|||||||]request url  {}({}) params : {}",uri,requestMethod,sb.toString());
+            log.info("[|||||||] - request url  {} - ({}) params : {}",uri,requestMethod,sb.toString());
 
             result = joinPoint.proceed();
 
             if(result != null){
-                log.info("[|||||||]request url  {}({}) return : {}",uri,requestMethod,result);
+                log.info("[|||||||] - request url  {} - ({}) return : {}({})",uri,requestMethod,result,result.getClass().getTypeName());
             }else{
-                log.info("[|||||||]request url  {}({}) end.");
+                log.info("[|||||||] - request url  {} - ({}) end.",uri,requestMethod);
             }
         } catch (Throwable t) {
             throw new RuntimeException(t);

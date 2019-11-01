@@ -24,4 +24,18 @@
             u.username = #{username}
     </select>
 
+    <insert id="addUser" parameterType="com.open.web.bean.User" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into user (
+            username,
+            password,
+            gender,
+            age
+        )values(
+            #{username},
+            #{password},
+            #{gender},
+            #{age}
+        )
+    </insert>
+
 </mapper>

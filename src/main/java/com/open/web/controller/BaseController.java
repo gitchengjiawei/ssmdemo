@@ -1,5 +1,7 @@
 package com.open.web.controller;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,6 +16,7 @@ import java.util.Set;
  * @auther 程佳伟
  * @create 2019-10-12 23:45
  */
+@Controller
 public class BaseController {
 
     /**
@@ -21,7 +24,9 @@ public class BaseController {
      * @param pageName 页面的名称
      * @return
      */
+    @RequestMapping("/toPage")
     public String toPage(String pageName){
+
         return pageName;
     }
 
@@ -30,7 +35,7 @@ public class BaseController {
      * @param url 跳转的页面
      * @return
      */
-    public ModelAndView getModelAndView(String url){
+    public ModelAndView getModelAndView(String url,String code,String message){
 
         ModelAndView mv = new ModelAndView();
 
@@ -39,6 +44,8 @@ public class BaseController {
 
         mv.addObject("params",parameterMap);
         mv.addObject("uri",request.getRequestURI());
+        mv.addObject("code",code);
+        mv.addObject("message",message);
 
         mv.setViewName(url);
         return mv;
